@@ -15,6 +15,11 @@ namespace EmployeeManagementProject.Manager
             _repository = repository;
         }
 
+        public IEnumerable<EmployeeModel> GetAllEmployees()
+        {
+            return _repository.GetAllEmployees();
+        }
+
         public bool Login(int id, string mobile)
         {
             return _repository.Login(id, mobile);
@@ -25,9 +30,9 @@ namespace EmployeeManagementProject.Manager
             return _repository.Register(employee);
         }
 
-        public bool Update(EmployeeModel employeeModel, int id)
+        public bool Update(EmployeeModel employeeModel)
         {
-            return _repository.Update(employeeModel, id);
+            return _repository.Update(employeeModel);
         }
     }
 }

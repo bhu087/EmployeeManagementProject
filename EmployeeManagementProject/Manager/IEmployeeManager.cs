@@ -10,6 +10,7 @@ namespace EmployeeManagementProject.Manager
     {
         bool Register(EmployeeModel employee);
         bool Login(int id, string mobile);
-        bool Update(EmployeeModel employeeModel, int id);
+        bool Update(EmployeeModel employeeModel);
+        IEnumerable<EmployeeModel> GetAllEmployees();
     }
 }

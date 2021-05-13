@@ -66,7 +66,7 @@ namespace EmployeeManagementProject.Repository
                 return false;
             }
         }
-        public bool Update(EmployeeModel employeeModel, int id)
+        public bool Update(EmployeeModel employeeModel)
         {
             using (SqlConnection connection = new SqlConnection(conString))
             {
@@ -74,7 +74,7 @@ namespace EmployeeManagementProject.Repository
                     SqlCommand command1 = new SqlCommand("spUpdateEmployeeToTable", connection);
                     command1.CommandType = CommandType.StoredProcedure;
                     connection.Open();
-                    command1.Parameters.AddWithValue("EmployeeID", id);
+                    command1.Parameters.AddWithValue("EmployeeID", employeeModel.EmployeeID);
                     command1.Parameters.AddWithValue("FirstName", employeeModel.FirstName);
                     command1.Parameters.AddWithValue("LastName", employeeModel.LastName);
                     command1.Parameters.AddWithValue("Mobile", employeeModel.Mobile);
@@ -84,7 +84,31 @@ namespace EmployeeManagementProject.Repository
                     return true;
                 
             }
-                return false;
+        }
+        public IEnumerable<EmployeeModel> GetAllEmployees()
+        {
+            List<EmployeeModel> employeesList = new List<EmployeeModel>();
+            using (SqlConnection connection = new SqlConnection(conString))
+            {
+                SqlCommand command = new SqlCommand("spGetAllEmployees", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    EmployeeModel employee = new EmployeeModel
+                    {
+                        EmployeeID = (int)reader["EmployeeID"],
+                        FirstName = reader["FirstName"].ToString(),
+                        LastName = reader["LastName"].ToString(),
+                        Mobile = reader["Mobile"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        City = reader["City"].ToString()
+                    };
+                    employeesList.Add(employee);
+                }
+            }
+            return employeesList;
         }
     }
 }

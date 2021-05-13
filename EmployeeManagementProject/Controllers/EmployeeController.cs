@@ -49,14 +49,20 @@ namespace EmployeeManagementProject.Controllers
         }
         [HttpPut]
         [Route("api/update")]
-        public ActionResult Update(int id, EmployeeModel employeeModel)
+        public ActionResult Update(EmployeeModel employeeModel)
         {
-            response = _manager.Update(employeeModel, id);
+            response = _manager.Update(employeeModel);
             if (response)
             {
                 return this.Ok("Updated");
             }
             return this.BadRequest("Not updated");
+        }
+        [HttpGet]
+        [Route("api/getAll")]
+        public ActionResult GetAllEmployees()
+        {
+            return this.Ok(_manager.GetAllEmployees());
         }
     }
 }
