@@ -25,7 +25,7 @@ namespace EmployeeManagementProject.Repository
         {
             using (SqlConnection connection = new SqlConnection(conString))
             {
-                SqlCommand sqlCommand = new SqlCommand("spAddEmployeeToTable",connection);
+                SqlCommand sqlCommand = new SqlCommand("spAddEmployeeToTable", connection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("FirstName", employeeModel.FirstName);
                 sqlCommand.Parameters.AddWithValue("LastName", employeeModel.LastName);
@@ -39,9 +39,32 @@ namespace EmployeeManagementProject.Repository
             }
             return false;
         }
-        public bool Login(EmployeeModel employeeModel)
+        public bool Login(int id, string mobile)
         {
-            return true;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    SqlCommand command = new SqlCommand("spEmployeeLogin", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("EmployeeID", id);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (mobile.ToString().Equals(reader["Mobile"].ToString()))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ namespace EmployeeManagementProject.Controllers
         {
             _manager = manager;
         }
+        bool response;
         [HttpPost]
         [Route("api/register")]
         public ActionResult Register(string firstName, string lastName, string mobile, string email, string city)
@@ -28,12 +29,23 @@ namespace EmployeeManagementProject.Controllers
                 Email = email,
                 City = city
             };
-            bool responce = _manager.Register(employee);
-            if (responce)
+            response = _manager.Register(employee);
+            if (response)
             {
                 return this.Ok("Registered Successfully");
             }
             return this.BadRequest("Not registered");
+        }
+        [HttpPost]
+        [Route("api/login")]
+        public ActionResult Login(int id, string mobile)
+        {
+            response = _manager.Login(id, mobile);
+            if (response)
+            {
+                return this.Ok("Logged in successfully");
+            }
+            return this.BadRequest("Not Logged in");
         }
     }
 }

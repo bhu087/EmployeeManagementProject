@@ -9,6 +9,6 @@ namespace EmployeeManagementProject.Manager
     public interface IEmployeeManager
     {
         bool Register(EmployeeModel employee);
-        bool Login(EmployeeModel employee);
+        bool Login(int id, string mobile);
     }
 }

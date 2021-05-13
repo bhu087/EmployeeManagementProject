@@ -14,6 +14,12 @@ namespace EmployeeManagementProject.Manager
         {
             _repository = repository;
         }
+
+        public bool Login(int id, string mobile)
+        {
+            return _repository.Login(id, mobile);
+        }
+
         public bool Register(EmployeeModel employee)
         {
             return _repository.Register(employee);
