@@ -24,5 +24,10 @@ namespace EmployeeManagementProject.Manager
         {
             return _repository.Register(employee);
         }
+
+        public bool Update(EmployeeModel employeeModel, int id)
+        {
+            return _repository.Update(employeeModel, id);
+        }
     }
 }

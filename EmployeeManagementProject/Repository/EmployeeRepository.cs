@@ -66,5 +66,25 @@ namespace EmployeeManagementProject.Repository
                 return false;
             }
         }
+        public bool Update(EmployeeModel employeeModel, int id)
+        {
+            using (SqlConnection connection = new SqlConnection(conString))
+            {
+                    connection.Close();
+                    SqlCommand command1 = new SqlCommand("spUpdateEmployeeToTable", connection);
+                    command1.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command1.Parameters.AddWithValue("EmployeeID", id);
+                    command1.Parameters.AddWithValue("FirstName", employeeModel.FirstName);
+                    command1.Parameters.AddWithValue("LastName", employeeModel.LastName);
+                    command1.Parameters.AddWithValue("Mobile", employeeModel.Mobile);
+                    command1.Parameters.AddWithValue("Email", employeeModel.Email);
+                    command1.Parameters.AddWithValue("City", employeeModel.City);
+                    command1.ExecuteNonQuery();
+                    return true;
+                
+            }
+                return false;
+        }
     }
 }
