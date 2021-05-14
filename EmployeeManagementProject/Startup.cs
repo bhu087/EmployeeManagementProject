@@ -1,30 +1,42 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EmployeeManagementProject.Repository;
-using EmployeeManagementProject.Manager;
+﻿/////------------------------------------------------------------------------
+////<copyright file="Startup.cs" company="BridgeLabz">
+////author="Bhushan"
+////</copyright>
+////-------------------------------------------------------------------------
 
 namespace EmployeeManagementProject
 {
+    using EmployeeManagementProject.Manager;
+    using EmployeeManagementProject.Repository;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
+    /// <summary>
+    /// Startup class
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// startup constructor
+        /// </summary>
+        /// <param name="configuration">parameter configuration</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets the Configuration
+        /// </summary>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Configuration services
+        /// </summary>
+        /// <param name="services">services parameter</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
@@ -33,6 +45,11 @@ namespace EmployeeManagementProject
             services.AddSwaggerGen();
         }
 
+        /// <summary>
+        /// Configuration for app
+        /// </summary>
+        /// <param name="app">parameter application builder</param>
+        /// <param name="env">parameter hosting environment</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -43,10 +60,11 @@ namespace EmployeeManagementProject
             {
                 app.UseHsts();
             }
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test Api v1");
             });
             app.UseHttpsRedirection();
             app.UseMvc();

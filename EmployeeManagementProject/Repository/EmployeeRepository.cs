@@ -1,26 +1,47 @@
-﻿using EmployeeManagement.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
-using System.Data;
-using Microsoft.IdentityModel.Protocols;
-using MySql.Data.MySqlClient;
+﻿/////------------------------------------------------------------------------
+////<copyright file="EmployeeRepository.cs" company="BridgeLabz">
+////author="Bhushan"
+////</copyright>
+////-------------------------------------------------------------------------
 
 namespace EmployeeManagementProject.Repository
 {
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using EmployeeManagement.Models;
+    using Microsoft.Extensions.Configuration;
+
+    /// <summary>
+    /// Employee repository class
+    /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
-        public static IConfiguration appConfig;
-        public static string conString;
+        /// <summary>
+        /// configuration interface
+        /// </summary>
+        private static IConfiguration appConfig;
+
+        /// <summary>
+        /// connection string
+        /// </summary>
+        private static string conString;
+
+        /// <summary>
+        /// constructor for Employee Repository
+        /// </summary>
+        /// <param name="configuration">configuration parameter</param>
         public EmployeeRepository(IConfiguration configuration)
         {
             appConfig = configuration;
             conString = appConfig.GetConnectionString("DefaultConnection");
         }
 
+        /// <summary>
+        /// Register method
+        /// </summary>
+        /// <param name="employeeModel">Employee model</param>
+        /// <returns>returns boolean result</returns>
         public bool Register(EmployeeModel employeeModel)
         {
             try
@@ -40,6 +61,7 @@ namespace EmployeeManagementProject.Repository
                     {
                         return true;
                     }
+
                     return false;
                 }
             }
@@ -48,6 +70,13 @@ namespace EmployeeManagementProject.Repository
                 return false;
             }
         }
+
+        /// <summary>
+        /// Login method
+        /// </summary>
+        /// <param name="id">input as Id</param>
+        /// <param name="mobile">input as mobile</param>
+        /// <returns>returns boolean result</returns>
         public bool Login(int id, string mobile)
         {
             try
@@ -66,14 +95,21 @@ namespace EmployeeManagementProject.Repository
                             return true;
                         }
                     }
+
                     return false;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
         }
+
+        /// <summary>
+        /// Update method
+        /// </summary>
+        /// <param name="employeeModel">employee model</param>
+        /// <returns>returns boolean result</returns>
         public bool Update(EmployeeModel employeeModel)
         {
             try
@@ -97,8 +133,12 @@ namespace EmployeeManagementProject.Repository
             {
                 return false;
             }
-            
         }
+
+        /// <summary>
+        /// Get all employees method
+        /// </summary>
+        /// <returns>returns list of employees</returns>
         public IEnumerable<EmployeeModel> GetAllEmployees()
         {
             List<EmployeeModel> employeesList = new List<EmployeeModel>();
@@ -124,6 +164,7 @@ namespace EmployeeManagementProject.Repository
                         employeesList.Add(employee);
                     }
                 }
+
                 return employeesList;
             }
             catch
@@ -131,6 +172,12 @@ namespace EmployeeManagementProject.Repository
                 return null;
             }
         }
+
+        /// <summary>
+        /// Delete method
+        /// </summary>
+        /// <param name="id">id as input</param>
+        /// <returns>returns boolean result</returns>
         public bool Delete(int id)
         {
             try
@@ -146,6 +193,7 @@ namespace EmployeeManagementProject.Repository
                     {
                         return true;
                     }
+
                     return false;
                 }
             }
@@ -153,7 +201,6 @@ namespace EmployeeManagementProject.Repository
             {
                 return false;
             }
-            
         }
     }
 }
