@@ -15,6 +15,11 @@ namespace EmployeeManagementProject.Manager
             _repository = repository;
         }
 
+        public bool Delete(int id)
+        {
+            return _repository.Delete(id);
+        }
+
         public IEnumerable<EmployeeModel> GetAllEmployees()
         {
             return _repository.GetAllEmployees();

@@ -19,15 +19,15 @@ namespace EmployeeManagementProject.Controllers
         bool response;
         [HttpPost]
         [Route("api/register")]
-        public ActionResult Register(string firstName, string lastName, string mobile, string email, string city)
+        public ActionResult Register(EmployeeModel employeeModel)
         {
             EmployeeModel employee = new EmployeeModel
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Mobile = mobile,
-                Email = email,
-                City = city
+                FirstName = employeeModel.FirstName,
+                LastName = employeeModel.LastName,
+                Mobile = employeeModel.Mobile,
+                Email = employeeModel.Email,
+                City = employeeModel.City
             };
             response = _manager.Register(employee);
             if (response)
@@ -63,6 +63,17 @@ namespace EmployeeManagementProject.Controllers
         public ActionResult GetAllEmployees()
         {
             return this.Ok(_manager.GetAllEmployees());
+        }
+        [HttpDelete]
+        [Route("api/delete")]
+        public ActionResult Delete(int id)
+        {
+            response = _manager.Delete(id);
+            if (response)
+            {
+                return this.Ok("Deleted successfully");
+            }
+            return this.BadRequest("Employee not in DB");
         }
     }
 }

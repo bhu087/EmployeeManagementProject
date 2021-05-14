@@ -70,7 +70,6 @@ namespace EmployeeManagementProject.Repository
         {
             using (SqlConnection connection = new SqlConnection(conString))
             {
-                    connection.Close();
                     SqlCommand command1 = new SqlCommand("spUpdateEmployeeToTable", connection);
                     command1.CommandType = CommandType.StoredProcedure;
                     connection.Open();
@@ -109,6 +108,30 @@ namespace EmployeeManagementProject.Repository
                 }
             }
             return employeesList;
+        }
+        public bool Delete(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    SqlCommand command = new SqlCommand("spDeleteEmployee", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("EmployeeID", id);
+                    var result = command.ExecuteNonQuery();
+                    if (result == 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            
         }
     }
 }
