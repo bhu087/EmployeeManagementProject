@@ -23,21 +23,30 @@ namespace EmployeeManagementProject.Repository
 
         public bool Register(EmployeeModel employeeModel)
         {
-            using (SqlConnection connection = new SqlConnection(conString))
+            try
             {
-                SqlCommand sqlCommand = new SqlCommand("spAddEmployeeToTable", connection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("FirstName", employeeModel.FirstName);
-                sqlCommand.Parameters.AddWithValue("LastName", employeeModel.LastName);
-                sqlCommand.Parameters.AddWithValue("Mobile", employeeModel.Mobile);
-                sqlCommand.Parameters.AddWithValue("Email", employeeModel.Email);
-                sqlCommand.Parameters.AddWithValue("City", employeeModel.City);
-                connection.Open();
-                sqlCommand.ExecuteNonQuery();
-                connection.Close();
-                return true;
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    SqlCommand sqlCommand = new SqlCommand("spAddEmployeeToTable", connection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("FirstName", employeeModel.FirstName);
+                    sqlCommand.Parameters.AddWithValue("LastName", employeeModel.LastName);
+                    sqlCommand.Parameters.AddWithValue("Mobile", employeeModel.Mobile);
+                    sqlCommand.Parameters.AddWithValue("Email", employeeModel.Email);
+                    sqlCommand.Parameters.AddWithValue("City", employeeModel.City);
+                    connection.Open();
+                    var result = sqlCommand.ExecuteNonQuery();
+                    if (result == 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
             }
-            return false;
+            catch
+            {
+                return false;
+            }
         }
         public bool Login(int id, string mobile)
         {
@@ -62,14 +71,15 @@ namespace EmployeeManagementProject.Repository
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
                 return false;
             }
         }
         public bool Update(EmployeeModel employeeModel)
         {
-            using (SqlConnection connection = new SqlConnection(conString))
+            try
             {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
                     SqlCommand command1 = new SqlCommand("spUpdateEmployeeToTable", connection);
                     command1.CommandType = CommandType.StoredProcedure;
                     connection.Open();
@@ -81,33 +91,45 @@ namespace EmployeeManagementProject.Repository
                     command1.Parameters.AddWithValue("City", employeeModel.City);
                     command1.ExecuteNonQuery();
                     return true;
-                
+                }
             }
+            catch
+            {
+                return false;
+            }
+            
         }
         public IEnumerable<EmployeeModel> GetAllEmployees()
         {
             List<EmployeeModel> employeesList = new List<EmployeeModel>();
-            using (SqlConnection connection = new SqlConnection(conString))
+            try
             {
-                SqlCommand command = new SqlCommand("spGetAllEmployees", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                using (SqlConnection connection = new SqlConnection(conString))
                 {
-                    EmployeeModel employee = new EmployeeModel
+                    SqlCommand command = new SqlCommand("spGetAllEmployees", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
                     {
-                        EmployeeID = (int)reader["EmployeeID"],
-                        FirstName = reader["FirstName"].ToString(),
-                        LastName = reader["LastName"].ToString(),
-                        Mobile = reader["Mobile"].ToString(),
-                        Email = reader["Email"].ToString(),
-                        City = reader["City"].ToString()
-                    };
-                    employeesList.Add(employee);
+                        EmployeeModel employee = new EmployeeModel
+                        {
+                            EmployeeID = (int)reader["EmployeeID"],
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            Mobile = reader["Mobile"].ToString(),
+                            Email = reader["Email"].ToString(),
+                            City = reader["City"].ToString()
+                        };
+                        employeesList.Add(employee);
+                    }
                 }
+                return employeesList;
             }
-            return employeesList;
+            catch
+            {
+                return null;
+            }
         }
         public bool Delete(int id)
         {
