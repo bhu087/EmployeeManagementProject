@@ -12,5 +12,6 @@ namespace EmployeeManagementProject.Repository
         bool Login(int id, string mobile);
         bool Update(EmployeeModel employeeModel);
         IEnumerable<EmployeeModel> GetAllEmployees();
+        bool Delete(int id);
     }
 }
